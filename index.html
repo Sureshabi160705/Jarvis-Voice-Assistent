@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis Voice Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        #jarvis-img {
+            width: 1080px;
+            height: 720px;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #12bce0;
+            color: #12bce0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #d20e1e;
+        }
+
+        img:hover {
+            transform: 3s;
+        }
+    </style>
+</head>
+
+<body bgcolor="#a6d0d9">
+    <h1>Jarvis Voice Assistant</h1>
+    <img id="jarvis-img" src="1.png" alt="Jarvis Image">
+    <br><br>
+
+    <script>
+        const image = document.getElementById('jarvis-img');
+
+        // Event listener to change image on click
+        image.addEventListener('click', () => {
+            image.src = 'H0zY.gif';
+        });
+        // Check browser support
+        if (!('speechSynthesis' in window) || !('webkitSpeechRecognition' in window)) {
+            alert("Sorry, your browser doesn't support Web Speech API.");
+        } else {
+            const synth = window.speechSynthesis; // For speech synthesis
+            const recognition = new webkitSpeechRecognition(); // For speech recognition
+            recognition.lang = 'en-US';
+            recognition.continuous = false; // Listen for one command at a time
+            recognition.interimResults = false;
+
+            // Function to speak a given text
+            const speak = (text) => {
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = 'en-US';
+                synth.speak(utter);
+            };
+
+            // Define commands
+            const commands = {
+                greet: () => speak("Hello, how can I assist you today?"),
+                howAreYou: () => speak("I'm just a program, but I'm here to help! How can I assist you?"),
+                whoCreatedYou: () => speak("I was created by a fullstack developer of Mr.Sureshkumar using JavaScript and the Web Speech API. Pretty cool, right?"),
+
+                time: () => {
+                    const now = new Date();
+                    const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    speak(`The time is ${time}.`);
+                },
+                call: (number) => {
+                    if (/^\d+$/.test(number)) {
+                        speak(`Dialing ${number}`);
+                        window.location.href = `tel:${number}`;
+                    } else {
+                        speak("That doesn't seem to be a valid phone number.");
+                    }
+                },
+                date: () => {
+                    const today = new Date();
+                    const date = today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    speak(`Today is ${date}.`);
+                },
+                setReminder: (task) => {
+                    speak(`Reminder set for: ${task}`);
+                    alert(`Reminder: ${task}`);
+                },
+                weather: (location) => {
+                    speak(`Checking the weather in ${location}.`);
+                    window.open(`https://www.google.com/search?q=weather+in+${location}`, '_blank');
+                },
+                tellJoke: () => {
+                    const jokes = [
+                        "Why don't programmers like nature? Too many bugs!",
+                        "Why do Java developers wear glasses? Because they can't C#!",
+                        "What’s a programmer’s favorite type of music? Algorithms!",
+                    ];
+                    const joke = jokes[Math.floor(Math.random() * jokes.length)];
+                    speak(joke);
+                },
+                funFact: () => {
+                    const facts = [
+                        "Did you know the Eiffel Tower can be 15 cm taller during the summer?",
+                        "The first email was sent by Ray Tomlinson to himself in 1971.",
+                        "Octopuses have three hearts.",
+                    ];
+                    const fact = facts[Math.floor(Math.random() * facts.length)];
+                    speak(fact);
+                },
+                playMusic: () => {
+                    speak("Playing music on YouTube.");
+                    window.open('https://music.youtube.com', '_blank');
+                },
+                search: (query) => {
+                    speak(`Searching for ${query}`);
+                    window.open(`https://www.google.com/search?q=${query}`, '_blank');
+                },
+                openYouTube: () => {
+                    speak("Opening YouTube.");
+                    window.open('https://www.youtube.com', '_blank');
+                },
+
+                openInstagram: () => {
+                    speak("Opening Instagram.");
+                    window.open('https://www.instagram.com', '_blank');
+                },
+                openTwitter: () => {
+                    speak("Opening Twitter.");
+                    window.open('https://www.twitter.com', '_blank');
+                },
+                openFacebook: () => {
+                    speak("Opening Facebook.");
+                    window.open('https://www.facebook.com', '_blank');
+                },
+                openGoogle: () => {
+                    speak("Opening Google.");
+                    window.open('https://www.google.com', '_blank');
+                },
+                openMap: () => {
+                    speak("Opening Google Maps.");
+                    window.open('https://maps.google.com', '_blank');
+                },
+                openGmail: () => {
+                    speak("Opening Gmail.");
+                    window.open('https://mail.google.com', '_blank');
+                },
+                owner: () => {
+                    speak("Opening Owner Deteils.");
+                    window.open('https://drive.google.com/file/d/1Q-dVKguovcibnM192YyrvYG-YyId91lU/view?usp=drive_link', '_blank');
+                    speak("Its Sureshkumar,Fullstack Developer from Tamilnadu");
+                },
+                couple: () => {
+                    speak("showing Couple's Deteils");
+                    window.open('https://drive.google.com/file/d/1oCPGgwwjaAEEiDs2mtX9xdY1bEeiwY6_/view?usp=drive_link', '_blank');
+                    speak("Its Suresh and Abisri from kumarapalayam.they are true lovers from last 3 years");
+                },
+                unknown: () => speak("I'm sorry, I didn't understand that."),
+            };
+
+            // Start listening
+            const startListening = () => {
+                recognition.start();
+                speak("I'm listening...");
+            };
+
+            // On speech recognition result
+            recognition.onresult = (event) => {
+                const command = event.results[0][0].transcript.toLowerCase();
+                console.log(`Command received: ${command}`);
+
+                if (command.includes("hello") || command.includes("hi")) {
+                    commands.greet();
+                } else if (command.includes("how are you")) {
+                    commands.howAreYou();
+                } else if (command.includes("who created you")) {
+                    commands.whoCreatedYou();
+                } else if (command.includes("what is time now")) {
+                    commands.time();
+                } else if (command.includes("date")) {
+                    commands.date();
+                } else if (command.includes("set a reminder for")) {
+                    const task = command.replace("reminder for", "").trim();
+                    commands.setReminder(task);
+                } else if (command.includes("check weather in")) {
+                    const location = command.replace("weather in", "").trim();
+                    commands.weather(location);
+                } else if (command.includes("tell me a joke")) {
+                    commands.tellJoke();
+                } else if (command.includes("fun fact")) {
+                    commands.funFact();
+                } else if (command.includes("play music")) {
+                    commands.playMusic();
+                } else if (command.includes("open youtube")) {
+                    commands.openYouTube();
+                } else if (command.includes("open instagram")) {
+                    commands.openInstagram();
+                } else if (command.includes("open twitter")) {
+                    commands.openTwitter();
+                } else if (command.includes("open facebook")) {
+                    commands.openFacebook();
+                } else if (command.includes("open google")) {
+                    commands.openGoogle();
+                } else if (command.includes("open map") || command.includes("open maps")) {
+                    commands.openMap();
+                } else if (command.includes("open gmail")) {
+                    commands.openGmail();
+                } else if (command.includes("show your owner")) {
+                    commands.owner();
+                } else if (command.includes("show your lover")) {
+                    commands.couple();
+                } else if (command.includes("call")) {
+                    const number = command.replace("call", "").trim();
+                    commands.call(number);
+                } else {
+                    commands.unknown();
+                }
+            };
+
+            // On error
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error:", event.error);
+                speak("Sorry, I couldn't understand. Please try again.");
+            };
+
+            // Attach event to button
+            const button = document.getElementById('jarvis-img');
+            button.onclick = startListening;
+        }
+    </script>
+</body>
+
+</html>
